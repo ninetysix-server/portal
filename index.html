@@ -901,10 +901,93 @@
             transition: all 0.3s;
         }
 
+
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #004370 0%, #009B5B 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .loading-logo i {
+            font-size: 42px;
+            color: white;
+        }
+
+        .loading-logo span {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-progress {
+            width: 280px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: white;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
     </style>
 </head>
 <body>
-
+<!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-logo">
+            <i class="fas fa-user-circle"></i>
+            <span>Client Portal</span>
+        </div>
+        <div class="loading-spinner"></div>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">Loading resources...</div>
+    </div>
 
     <div class="container">
         <!-- Header -->
@@ -1342,6 +1425,49 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
+
+        // Loading screen functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const progressBar = document.getElementById('progress-bar');
+            const loadingText = document.getElementById('loading-text');
+            const container = document.querySelector('.container');
+            
+            // Simulate loading progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Update progress bar and text
+                    progressBar.style.width = progress + '%';
+                    loadingText.textContent = 'Almost done...';
+                    
+                    // Hide loading screen and show content
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            container.style.opacity = '1';
+                        }, 500);
+                    }, 800);
+                } else {
+                    // Update progress bar and text
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress < 30) {
+                        loadingText.textContent = 'Loading resources...';
+                    } else if (progress < 60) {
+                        loadingText.textContent = 'Initializing application...';
+                    } else if (progress < 90) {
+                        loadingText.textContent = 'Finalizing setup...';
+                    }
+                }
+            }, 300);
+        });
+        
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBV58uMzmTMzdqvlYfQCEcCovAsuT-HFUU",
@@ -2164,5 +2290,6 @@ registerBtn.addEventListener('click', () => {
 </body>
 
 </html>
+
 
 
