@@ -1488,7 +1488,9 @@
             }
         }
 
-        // // Register new user
+ // Regex: At least 6 digits, 1 letter, 1 special character
+const passwordRegex = /^(?=(?:.*\d){6,})(?=.*[A-Za-z])(?=.*[^A-Za-z0-9]).+$/;
+
 registerBtn.addEventListener('click', () => {
     const name = document.getElementById('registerName').value;
     const email = document.getElementById('registerEmail').value;
@@ -1500,26 +1502,24 @@ registerBtn.addEventListener('click', () => {
         return;
     }
     
-    if (password.length < 6) {
-        showAlert(authAlert, 'Password must be at least 6 characters', 'error');
+    if (!passwordRegex.test(password)) {
+        showAlert(authAlert, 'Password must have at least 6 numbers, 1 letter, and 1 special character', 'error');
         return;
     }
-    
+
     auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // Generate a default profile photo based on user's initials
             const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
             const defaultPhotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=004370&color=fff&size=150`;
             
-            // Create user document in Firestore
             return db.collection('clients').doc(userCredential.user.uid).set({
                 name: name,
                 email: email,
                 clientId: generateClientId(),
                 rewards: 0,
                 balance: 0,
-                photoURL: defaultPhotoUrl,  // Use the generated default photo
-                role: 'client' // Default role
+                photoURL: defaultPhotoUrl,
+                role: 'client'
             });
         })
         .then(() => {
@@ -1532,6 +1532,7 @@ registerBtn.addEventListener('click', () => {
             showAlert(authAlert, error.message, 'error');
         });
 });
+
         // Login with email and password
         loginBtn.addEventListener('click', () => {
             const email = document.getElementById('loginEmail').value;
@@ -2163,4 +2164,5 @@ registerBtn.addEventListener('click', () => {
 </body>
 
 </html>
+
 
