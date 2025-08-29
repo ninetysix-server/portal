@@ -1488,47 +1488,50 @@
             }
         }
 
-        // Register new user
-        registerBtn.addEventListener('click', () => {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+        // // Register new user
+registerBtn.addEventListener('click', () => {
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        showAlert(authAlert, 'Passwords do not match', 'error');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showAlert(authAlert, 'Password must be at least 6 characters', 'error');
+        return;
+    }
+    
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Generate a default profile photo based on user's initials
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+            const defaultPhotoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=004370&color=fff&size=150`;
             
-            if (password !== confirmPassword) {
-                showAlert(authAlert, 'Passwords do not match', 'error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showAlert(authAlert, 'Password must be at least 6 characters', 'error');
-                return;
-            }
-            
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // user document in Firestore
-                    return db.collection('clients').doc(userCredential.user.uid).set({
-                        name: name,
-                        email: email,
-                        clientId: generateClientId(),
-                        rewards: 0,
-                        balance: 0,
-                        photoURL: 'https://via.placeholder.com/150',
-                        role: 'client' // Default role
-                    });
-                })
-                .then(() => {
-                    showAlert(authAlert, 'Account created successfully!', 'success');
-                    setTimeout(() => {
-                        loginTab.click();
-                    }, 1500);
-                })
-                .catch((error) => {
-                    showAlert(authAlert, error.message, 'error');
-                });
+            // Create user document in Firestore
+            return db.collection('clients').doc(userCredential.user.uid).set({
+                name: name,
+                email: email,
+                clientId: generateClientId(),
+                rewards: 0,
+                balance: 0,
+                photoURL: defaultPhotoUrl,  // Use the generated default photo
+                role: 'client' // Default role
+            });
+        })
+        .then(() => {
+            showAlert(authAlert, 'Account created successfully!', 'success');
+            setTimeout(() => {
+                loginTab.click();
+            }, 1500);
+        })
+        .catch((error) => {
+            showAlert(authAlert, error.message, 'error');
         });
-
+});
         // Login with email and password
         loginBtn.addEventListener('click', () => {
             const email = document.getElementById('loginEmail').value;
@@ -2160,3 +2163,4 @@
 </body>
 
 </html>
+
