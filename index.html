@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/icon.svg">
+    <title>Client Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #004370;
+            --secondary: #009B5B;
+            --accent: #009B5B;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f9c74f;
+            --gray: #adb5bd;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --gradient: #004370;
+        }
+        
+        body {
+            background: #f0f2f5;
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 0px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav {
+            display: none;
+            gap: 15px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            background: var(--light);
+            color: var(--dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;  
+            align-items: center;      
+            height: 100vh;            
+            }
+
+        
+        .btn-google {
+            background: white;
+            color: var(--dark);
+            border: 2px solid #e9ecef; 
+            display: block;
+            margin: 0 auto;  
+            }
+                    
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c1121f;
+            transform: translateY(-2px);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e9ecef;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .profile-img-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: var(--shadow);
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .profile-details {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+        
+        .detail-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detail-label i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        .detail-value {
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .rewards {
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .balance {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .btn-edit {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-logout {
+            background: #f8f9fa;
+            color: var(--dark);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark);
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background: #ffeaea;
+            color: #e63946;
+            border: 2px solid #ffc2c2;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #a5d6a7;
+        }
+        
+        .admin-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .client-list {
+            margin-top: 20px;
+        }
+        
+        .client-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .client-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .client-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .client-name {
+            font-weight: 600;
+        }
+        
+        .client-email {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .client-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .access-denied {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .access-denied i {
+            font-size: 64px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .access-denied h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .access-denied p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f2f5;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: #f0f2f5;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .account-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .admin-badge {
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        /* Payment Popup Styles */
+        .payment-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .payment-popup.active {
+            display: flex;
+        }
+        
+        .payment-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .payment-header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .payment-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .payment-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .close-payment {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .payment-body {
+            padding: 25px;
+        }
+        
+        .payment-details {
+            margin-bottom: 25px;
+        }
+        
+        .design-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .design-name {
+            font-weight: 500;
+        }
+        
+        .design-cost {
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .discount-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--success);
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #ddd;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .payable-amount {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        
+        .pay-now-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pay-now-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        /* Bank Info Popup */
+        .bank-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        
+        .bank-popup.active {
+            display: flex;
+        }
+        
+        .bank-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        .bank-header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .bank-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .close-bank {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .bank-body {
+            padding: 25px;
+        }
+        
+        .bank-details {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .bank-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .bank-label {
+            width: 140px;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .bank-value {
+            flex: 1;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .bank-note {
+            background: #fff8e6;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        /* Admin Payment Controls */
+        .admin-payment-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* Active Payment Sessions */
+        .active-sessions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        
+        .session-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .session-client {
+            font-weight: 600;
+        }
+        
+        .session-amount {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .session-date {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-actions {
+                flex-direction: column;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .admin-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .client-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .bank-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .bank-label {
+                width: 100%;
+            }
+            
+            .session-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .payment-method {
+            width: 60px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-user-circle"></i>
+                <span>Client Portal</span>
+            </div>
+            <div hidden class="nav">
+                <button class="nav-btn active" id="loginNavBtn">Login</button>
+                <button class="nav-btn" id="profileNavBtn" style="display: none;">Profile</button>
+                <button  class="nav-btn" id="adminNavBtn" style="display: none;">Admin</button>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div class="card page active" id="loginPage">
+            <div class="card-header">
+                Sign In to Your Account
+            </div>
+            <div class="card-body">
+                <div class="tabs">
+                    <div class="tab active" id="loginTab">Login</div>
+                    <div class="tab" id="registerTab">Register</div>
+                </div>
+                
+                <div class="alert" id="authAlert"></div>
+                
+                <!-- Login Form -->
+                <div class="tab-content active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                    </div>
+                    
+                    <button class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <button class="btn btn-google" id="googleLoginBtn">
+                        <i class="fab fa-google"></i> Login with Google
+                    </button>
+                </div>
+                
+                <!-- Register Form -->
+                <div class="tab-content" id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" placeholder="Create a password (min. 6 characters)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                    </div>
+                    
+                    <button class="btn btn-primary" id="registerBtn">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div class="card page" id="profilePage">
+            <div hidden class="card-header">
+                My Profile
+            </div>
+            <div class="card-body">
+                <div class="profile-content">
+                    <div class="profile-img-container">
+                        <img src="https://via.placeholder.com/150" alt="Profile Photo" class="profile-img" id="profilePhoto">
+                    </div>
+                    
+                    <h2 class="profile-name" id="profileName">John Doe</h2>
+                    
+                    <div class="profile-details">
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-envelope"></i> Email:
+                            </span>
+                            <span class="detail-value" id="profileEmail">john.doe@example.com</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-id-card"></i> Client ID:
+                            </span>
+                            <span class="detail-value" id="profileClientId">AB12X9</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-gift"></i> Rewards %:
+                            </span>
+                            <span class="detail-value rewards" id="profileRewards">5%</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-wallet"></i> Balance:
+                            </span>
+                            <span class="detail-value balance" id="profileBalance">R 1,250.00</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-user-shield"></i> Account Type:
+                            </span>
+                            <span class="detail-value" id="profileRole">Client</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="btn-edit" id="editProfileBtn">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <button class="btn-logout" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+
+                    <div class="account-actions">
+                        <h3>Account Management</h3>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" id="changePasswordBtn">
+                                <i class="fas fa-key"></i> Change Password
+                            </button>
+                            <button class="btn btn-danger" id="deleteAccountBtn">
+                                <i class="fas fa-trash-alt"></i> Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Page -->
+        <div class="card page" id="adminPage">
+            <div class="card-header">
+                Admin Dashboard <span class="admin-badge">ADMIN</span>
+            </div>
+            <div class="card-body">
+                <div class="alert" id="adminAlert"></div>
+                
+                <h3>Manage Client Rewards & Balance</h3>
+                
+                <div class="admin-controls">
+                    <div class="form-group">
+                        <label for="adminClientSelect">Select Client</label>
+                        <select id="adminClientSelect" class="form-control">
+                            <option value="">-- Select a client --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminRewards">Rewards Percentage</label>
+                        <input type="number" id="adminRewards" min="0" max="100" step="0.1" class="form-control" placeholder="Enter rewards %">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminBalance">Balance (ZAR)</label>
+                        <input type="number" id="adminBalance" min="0" step="0.01" class="form-control" placeholder="Enter balance">
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-primary" id="adminUpdateBtn">
+                            <i class="fas fa-save"></i> Update Client
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Admin Payment Controls -->
+                <div class="admin-payment-section">
+                    <h3>Create Payment Request</h3>
+                    
+                    <div class="admin-controls">
+                        <div class="form-group">
+                            <label for="adminPaymentClient">Select Client</label>
+                            <select id="adminPaymentClient">
+                                <option value="">-- Select a client --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="adminDesigns">Designs & Costs (JSON format)</label>
+                            <textarea id="adminDesigns" placeholder='[{"name":"Website Design","cost":5000},{"name":"Logo Design","cost":2500}]'></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="adminDiscount">Discount Percentage</label>
+                            <input type="number" id="adminDiscount" min="0" max="100" value="10">
+                        </div>
+                        
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button class="btn btn-primary" id="createPaymentBtn">
+                                <i class="fas fa-money-bill-wave"></i> Create Payment Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Payment Sessions -->
+                <div class="active-sessions">
+                    <h3>Active Payment Sessions</h3>
+                    <div id="activeSessionsList">
+                        <!-- Active sessions-->
+                    </div>
+                </div>
+                
+                <div class="client-list" id="clientList">
+                    <!-- Client list -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Denied Page -->
+        <div class="card page" id="accessDeniedPage">
+            <div class="card-header">
+                Access Denied
+            </div>
+            <div class="card-body">
+                <div class="access-denied">
+                    <i class="fas fa-ban"></i>
+                    <h2>Access Restricted</h2>
+                    <p>You don't have permission to access this page.</p>
+                    <button class="btn btn-primary" id="goBackBtn">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close-modal" id="closeModal">&times;</span>
+            </div>
+            
+            <div class="alert" id="profileAlert"></div>
+            
+            <div class="form-group">
+                <label for="editPhoto">Profile Photo URL</label>
+                <input type="text" id="editPhoto" placeholder="Paste image URL">
+            </div>
+            
+            <div class="form-group">
+                <label for="editName">Full Name</label>
+                <input type="text" id="editName" placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input type="email" id="editEmail" placeholder="Enter your email">
+            </div>
+            
+            <button class="btn btn-primary" id="saveProfileBtn">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <span class="close-modal" id="closePasswordModal">&times;</span>
+            </div>
+            
+            <div class="alert" id="passwordAlert"></div>
+            
+            <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" placeholder="Enter your current password">
+            </div>
+            
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" placeholder="Enter new password (min. 6 characters)">
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmNewPassword">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" placeholder="Confirm your new password">
+            </div>
+            
+            <button class="btn btn-primary" id="savePasswordBtn">
+                <i class="fas fa-save"></i> Change Password
+            </button>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Delete Account</h2>
+                <span class="close-modal" id="closeDeleteModal">&times;</span>
+            </div>
+            
+            <div class="alert" id="deleteAlert"></div>
+            
+            <div class="form-group">
+                <p>Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently deleted.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="deletePassword">Confirm Password</label>
+                <input type="password" id="deletePassword" placeholder="Enter your password to confirm">
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt"></i> Delete Account
+                </button>
+                <button class="btn btn-logout" id="cancelDeleteBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Confirmation Popup -->
+    <div class="payment-popup" id="paymentPopup">
+        <div class="payment-content">
+            <div class="payment-header">
+                <h2>Payment Confirmation</h2>
+                <p>Standard Bank</p>
+                <span class="close-payment" id="closePayment">&times;</span>
+            </div>
+            <div class="payment-body">
+                <div class="payment-details" id="paymentDetails">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                
+                
+                    <div class="payment-title" style="text-align: center;"><p>Payment Method</p></div>
+                    <div class="payment-icons">
+                        <div class="payment-methods">
+                            <div class="payment-method active" id="visaMethod" style="background-image: url('https://cdn-icons-png.flaticon.com/512/196/196578.png');" data-method="visa"></div>
+                            <div class="payment-method" id="mastercardMethod" style="background-image: url('https://cdn-icons-png.flaticon.com/512/196/196561.png');" data-method="mastercard"></div>
+                            <div class="payment-method" id="cashMethod" style="background-image: url('https://cdn-icons-png.flaticon.com/512/845/845752.png');" data-method="cash"></div>
+                        </div>
+                    </div>
+                
+                
+                <button class="pay-now-btn" id="payNowBtn">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bank Info Popup -->
+    <div class="bank-popup" id="bankPopup">
+        <div class="bank-content">
+            <div class="bank-header">
+                <h2>Bank Transfer Details</h2>
+                <p>Standard Bank - Business Account</p>
+                <span class="close-bank" id="closeBank">&times;</span>
+            </div>
+            <div class="bank-body">
+                <div class="bank-details">
+                    <div class="bank-row">
+                        <div class="bank-label">Bank Name:</div>
+                        <div class="bank-value">Standard Bank</div>
+                    </div>
+                    <div class="bank-row">
+                        <div class="bank-label">Account Name:</div>
+                        <div class="bank-value">96 Studios</div>
+                    </div>
+                    <div class="bank-row">
+                        <div class="bank-label">Account Number:</div>
+                        <div class="bank-value">
+                            <span id="accountNumber">10214743584</span>
+                            <button class="copy-btn" id="copyAccountBtn">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bank-row">
+                        <div class="bank-label">Branch Code:</div>
+                        <div class="bank-value">051001</div>
+                    </div>
+                    <div class="bank-row">
+                        <div class="bank-label">Reference:</div>
+                        <div class="bank-value">
+                            <span id="referenceNumber">AB12X9</span>
+                            <button class="copy-btn" id="copyReferenceBtn">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bank-note">
+                    <p><strong>Important:</strong> After making the payment, please send the proof of payment via WhatsApp to +27 81 792 5033. Include your Email and reference number for faster processing.</p>
+                </div>
+                
+                <a href="https://wa.me/27123456789?text=Hello,%20I%20have%20made%20a%20payment%20for%20design%20services.%20My%20reference%20number%20is%20AB12X9." class="whatsapp-btn" target="_blank" id="whatsappBtn">
+                    <i class="fab fa-whatsapp"></i> Share Proof via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (core SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBV58uMzmTMzdqvlYfQCEcCovAsuT-HFUU",
+            authDomain: "client-portal-41757.firebaseapp.com",
+            projectId: "client-portal-41757",
+            storageBucket: "client-portal-41757.firebasestorage.app",
+            messagingSenderId: "112108980393",
+            appId: "1:112108980393:web:9f7befaac881fffa9a41b8"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const profilePage = document.getElementById('profilePage');
+        const adminPage = document.getElementById('adminPage');
+        const accessDeniedPage = document.getElementById('accessDeniedPage');
+        const loginNavBtn = document.getElementById('loginNavBtn');
+        const profileNavBtn = document.getElementById('profileNavBtn');
+        const adminNavBtn = document.getElementById('adminNavBtn');
+        const authAlert = document.getElementById('authAlert');
+        const loginBtn = document.getElementById('loginBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const editProfileModal = document.getElementById('editProfileModal');
+        const closeModal = document.getElementById('closeModal');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const profileAlert = document.getElementById('profileAlert');
+        const adminAlert = document.getElementById('adminAlert');
+        const adminClientSelect = document.getElementById('adminClientSelect');
+        const adminRewards = document.getElementById('adminRewards');
+        const adminBalance = document.getElementById('adminBalance');
+        const adminUpdateBtn = document.getElementById('adminUpdateBtn');
+        const clientList = document.getElementById('clientList');
+        const goBackBtn = document.getElementById('goBackBtn');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const changePasswordModal = document.getElementById('changePasswordModal');
+        const closePasswordModal = document.getElementById('closePasswordModal');
+        const savePasswordBtn = document.getElementById('savePasswordBtn');
+        const passwordAlert = document.getElementById('passwordAlert');
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        const deleteAccountModal = document.getElementById('deleteAccountModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deleteAlert = document.getElementById('deleteAlert');
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const profileRole = document.getElementById('profileRole');
+        
+        // Payment Elements
+        const paymentPopup = document.getElementById('paymentPopup');
+        const closePaymentBtn = document.getElementById('closePayment');
+        const payNowBtn = document.getElementById('payNowBtn');
+        const bankPopup = document.getElementById('bankPopup');
+        const closeBankBtn = document.getElementById('closeBank');
+        const copyAccountBtn = document.getElementById('copyAccountBtn');
+        const copyReferenceBtn = document.getElementById('copyReferenceBtn');
+        const paymentDetails = document.getElementById('paymentDetails');
+        const accountNumber = document.getElementById('accountNumber');
+        const referenceNumber = document.getElementById('referenceNumber');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        
+        // Admin Payment Elements
+        const adminPaymentClient = document.getElementById('adminPaymentClient');
+        const adminDesigns = document.getElementById('adminDesigns');
+        const adminDiscount = document.getElementById('adminDiscount');
+        const createPaymentBtn = document.getElementById('createPaymentBtn');
+        const activeSessionsList = document.getElementById('activeSessionsList');
+
+        // Current user data
+        let currentUserData = null;
+        let currentPaymentData = null;
+        let activeSessions = [];
+
+        // Tab switching
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+
+        // Navigation
+        loginNavBtn.addEventListener('click', () => showPage('loginPage'));
+        profileNavBtn.addEventListener('click', () => {
+            if (currentUserData && currentUserData.role === 'client') {
+                showPage('profilePage');
+            } else {
+                showPage('accessDeniedPage');
+            }
+        });
+        adminNavBtn.addEventListener('click', () => {
+            if (currentUserData && currentUserData.role === 'admin') {
+                showPage('adminPage');
+            } else {
+                showPage('accessDeniedPage');
+            }
+        });
+        
+        goBackBtn.addEventListener('click', () => {
+            if (currentUserData) {
+                if (currentUserData.role === 'admin') {
+                    showPage('adminPage');
+                } else {
+                    showPage('profilePage');
+                }
+            } else {
+                showPage('loginPage');
+            }
+        });
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (pageId !== 'accessDeniedPage') {
+                const activeBtn = document.querySelector(`#${pageId}NavBtn`);
+                if (activeBtn) activeBtn.classList.add('active');
+            }
+        }
+
+        // Register new user
+        registerBtn.addEventListener('click', () => {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showAlert(authAlert, 'Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert(authAlert, 'Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // user document in Firestore
+                    return db.collection('clients').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        clientId: generateClientId(),
+                        rewards: 5,
+                        balance: 1000,
+                        photoURL: 'https://via.placeholder.com/150',
+                        role: 'client' // Default role
+                    });
+                })
+                .then(() => {
+                    showAlert(authAlert, 'Account created successfully!', 'success');
+                    setTimeout(() => {
+                        loginTab.click();
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showAlert(authAlert, error.message, 'error');
+                });
+        });
+
+        // Login with email and password
+        loginBtn.addEventListener('click', () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    // Login successful
+                })
+                .catch((error) => {
+                    showAlert(authAlert, error.message, 'error');
+                });
+        });
+
+        // Google Sign-In
+        googleLoginBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // Check if this is a new user
+                    if (result.additionalUserInfo.isNewUser) {
+                        // Create user document in Firestore
+                        return db.collection('clients').doc(result.user.uid).set({
+                            name: result.user.displayName,
+                            email: result.user.email,
+                            clientId: generateClientId(),
+                            rewards: 5,
+                            balance: 1000,
+                            photoURL: result.user.photoURL || 'https://via.placeholder.com/150',
+                            role: 'client'
+                        });
+                    }
+                })
+                .catch((error) => {
+                    showAlert(authAlert, error.message, 'error');
+                });
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut();
+        });
+
+        // Open edit profile modal
+        editProfileBtn.addEventListener('click', () => {
+            // Get current user data
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('clients').doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            document.getElementById('editPhoto').value = doc.data().photoURL;
+                            document.getElementById('editName').value = doc.data().name;
+                            document.getElementById('editEmail').value = doc.data().email;
+                            editProfileModal.style.display = 'flex';
+                        }
+                    });
+            }
+        });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            editProfileModal.style.display = 'none';
+        });
+
+        // Save profile changes
+        saveProfileBtn.addEventListener('click', () => {
+            const user = auth.currentUser;
+            if (user) {
+                const photoURL = document.getElementById('editPhoto').value;
+                const name = document.getElementById('editName').value;
+                const email = document.getElementById('editEmail').value;
+                
+                // Update Firestore document
+                db.collection('clients').doc(user.uid).update({
+                    photoURL: photoURL,
+                    name: name,
+                    email: email
+                })
+                .then(() => {
+                    // Update auth profile if email changed
+                    if (user.email !== email) {
+                        user.updateEmail(email);
+                    }
+                    
+                    showAlert(profileAlert, 'Profile updated successfully!', 'success');
+                    
+                    // Update UI
+                    document.getElementById('profilePhoto').src = photoURL;
+                    document.getElementById('profileName').textContent = name;
+                    document.getElementById('profileEmail').textContent = email;
+                    
+                    setTimeout(() => {
+                        editProfileModal.style.display = 'none';
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showAlert(profileAlert, error.message, 'error');
+                });
+            }
+        });
+
+        // Change password
+        changePasswordBtn.addEventListener('click', () => {
+            changePasswordModal.style.display = 'flex';
+        });
+
+        closePasswordModal.addEventListener('click', () => {
+            changePasswordModal.style.display = 'none';
+        });
+
+        savePasswordBtn.addEventListener('click', () => {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            const user = auth.currentUser;
+            const email = user.email;
+            
+            if (newPassword !== confirmNewPassword) {
+                showAlert(passwordAlert, 'New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showAlert(passwordAlert, 'New password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            // Reauthenticate user
+            const credential = firebase.auth.EmailAuthProvider.credential(email, currentPassword);
+            
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    // Update password
+                    return user.updatePassword(newPassword);
+                })
+                .then(() => {
+                    showAlert(passwordAlert, 'Password updated successfully!', 'success');
+                    setTimeout(() => {
+                        changePasswordModal.style.display = 'none';
+                        document.getElementById('currentPassword').value = '';
+                        document.getElementById('newPassword').value = '';
+                        document.getElementById('confirmNewPassword').value = '';
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showAlert(passwordAlert, error.message, 'error');
+                });
+        });
+
+        // Delete account
+        deleteAccountBtn.addEventListener('click', () => {
+            deleteAccountModal.style.display = 'flex';
+        });
+
+        closeDeleteModal.addEventListener('click', () => {
+            deleteAccountModal.style.display = 'none';
+        });
+
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteAccountModal.style.display = 'none';
+        });
+
+        confirmDeleteBtn.addEventListener('click', () => {
+            const password = document.getElementById('deletePassword').value;
+            const user = auth.currentUser;
+            const email = user.email;
+            
+            // Reauthenticate user
+            const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+            
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    // Delete user document from Firestore
+                    return db.collection('clients').doc(user.uid).delete();
+                })
+                .then(() => {
+                    // Delete user account
+                    return user.delete();
+                })
+                .then(() => {
+                    showAlert(deleteAlert, 'Account deleted successfully', 'success');
+                    setTimeout(() => {
+                        deleteAccountModal.style.display = 'none';
+                        auth.signOut();
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showAlert(deleteAlert, error.message, 'error');
+                });
+        });
+
+        // Admin: Update client data
+        adminUpdateBtn.addEventListener('click', () => {
+            const clientId = adminClientSelect.value;
+            const rewards = parseFloat(adminRewards.value);
+            const balance = parseFloat(adminBalance.value);
+            
+            if (!clientId) {
+                showAlert(adminAlert, 'Please select a client', 'error');
+                return;
+            }
+            
+            if (isNaN(rewards) || isNaN(balance)) {
+                showAlert(adminAlert, 'Please enter valid numbers', 'error');
+                return;
+            }
+            
+            db.collection('clients').doc(clientId).update({
+                rewards: rewards,
+                balance: balance
+            })
+            .then(() => {
+                showAlert(adminAlert, 'Client updated successfully!', 'success');
+                loadClients();
+                
+                // Clear form
+                adminRewards.value = '';
+                adminBalance.value = '';
+            })
+            .catch((error) => {
+                showAlert(adminAlert, error.message, 'error');
+            });
+        });
+
+        // Load clients for admin
+        function loadClients() {
+            db.collection('clients').where('role', '==', 'client').get()
+                .then((querySnapshot) => {
+                    // Clear client list and select
+                    clientList.innerHTML = '';
+                    adminClientSelect.innerHTML = '<option value="">-- Select a client --</option>';
+                    adminPaymentClient.innerHTML = '<option value="">-- Select a client --</option>';
+                    
+                    querySnapshot.forEach((doc) => {
+                        const client = doc.data();
+                        
+                        // Add to select dropdown
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.textContent = `${client.name} (${client.email})`;
+                        adminClientSelect.appendChild(option);
+                        
+                        // Add to payment client dropdown
+                        const paymentOption = document.createElement('option');
+                        paymentOption.value = doc.id;
+                        paymentOption.textContent = `${client.name} (${client.email})`;
+                        adminPaymentClient.appendChild(paymentOption);
+                        
+                        // Add to client list
+                        const clientItem = document.createElement('div');
+                        clientItem.className = 'client-item';
+                        clientItem.innerHTML = `
+                            <div class="client-info">
+                                <img src="${client.photoURL}" alt="Avatar" class="client-avatar">
+                                <div class="client-details">
+                                    <div class="client-name">${client.name}</div>
+                                    <div class="client-email">${client.email}</div>
+                                </div>
+                            </div>
+                            <div class="client-details">
+                                <div>Rewards: <span class="rewards">${client.rewards}%</span></div>
+                                <div>Balance: <span class="balance">R ${client.balance.toLocaleString()}</span></div>
+                            </div>
+                        `;
+                        clientList.appendChild(clientItem);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error loading clients: ", error);
+                });
+        }
+
+        // Load active payment sessions for admin
+        function loadActiveSessions() {
+            db.collection('payments')
+                .where('showPopup', '==', true)
+                .get()
+                .then((querySnapshot) => {
+                    activeSessionsList.innerHTML = '';
+                    activeSessions = [];
+                    
+                    if (querySnapshot.empty) {
+                        activeSessionsList.innerHTML = '<p>No active payment sessions.</p>';
+                        return;
+                    }
+                    
+                    querySnapshot.forEach((doc) => {
+                        const paymentData = doc.data();
+                        activeSessions.push({
+                            id: doc.id,
+                            ...paymentData
+                        });
+                        
+                        // Get client name
+                        db.collection('clients').doc(paymentData.clientId).get()
+                            .then((clientDoc) => {
+                                if (clientDoc.exists) {
+                                    const clientData = clientDoc.data();
+                                    
+                                    const sessionItem = document.createElement('div');
+                                    sessionItem.className = 'session-item';
+                                    sessionItem.innerHTML = `
+                                        <div class="session-info">
+                                            <div class="session-client">${clientData.name}</div>
+                                            <div class="session-amount">R ${paymentData.payableAmount.toLocaleString()}</div>
+                                            <div class="session-date">Created: ${paymentData.createdAt.toDate().toLocaleString()}</div>
+                                        </div>
+                                        <div class="client-actions">
+                                            <button class="btn btn-danger btn-sm end-session-btn" data-id="${doc.id}">
+                                                <i class="fas fa-times"></i> End Session
+                                            </button>
+                                        </div>
+                                    `;
+                                    activeSessionsList.appendChild(sessionItem);
+                                    
+                                    // Add event listener to the end session button
+                                    const endSessionBtn = sessionItem.querySelector('.end-session-btn');
+                                    endSessionBtn.addEventListener('click', () => {
+                                        endPaymentSession(doc.id);
+                                    });
+                                }
+                            });
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error loading active sessions: ", error);
+                });
+        }
+
+        // End payment session
+        function endPaymentSession(paymentId) {
+            db.collection('payments').doc(paymentId).update({
+                showPopup: false
+            })
+            .then(() => {
+                showAlert(adminAlert, 'Payment session ended successfully!', 'success');
+                loadActiveSessions();
+            })
+            .catch((error) => {
+                showAlert(adminAlert, error.message, 'error');
+            });
+        }
+
+        // Admin: When client is selected, populate form
+        adminClientSelect.addEventListener('change', () => {
+            const clientId = adminClientSelect.value;
+            
+            if (clientId) {
+                db.collection('clients').doc(clientId).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const client = doc.data();
+                            adminRewards.value = client.rewards;
+                            adminBalance.value = client.balance;
+                        }
+                    });
+            }
+        });
+
+        // Admin: Create payment request
+        createPaymentBtn.addEventListener('click', () => {
+            const clientId = adminPaymentClient.value;
+            const designsText = adminDesigns.value;
+            const discount = parseFloat(adminDiscount.value);
+            
+            if (!clientId) {
+                showAlert(adminAlert, 'Please select a client', 'error');
+                return;
+            }
+            
+            let designs;
+            try {
+                designs = JSON.parse(designsText);
+                if (!Array.isArray(designs)) {
+                    throw new Error('Designs must be an array');
+                }
+            } catch (error) {
+                showAlert(adminAlert, 'Invalid designs format. Please use valid JSON array format.', 'error');
+                return;
+            }
+            
+            // Calculate total and payable amount
+            let total = 0;
+            designs.forEach(design => {
+                total += design.cost;
+            });
+            
+            const discountAmount = total * (discount / 100);
+            const payableAmount = total - discountAmount;
+            
+            // Create payment request
+            const paymentData = {
+                clientId: clientId,
+                designs: designs,
+                discount: {
+                    percentage: discount,
+                    amount: discountAmount
+                },
+                total: total,
+                payableAmount: payableAmount,
+                showPopup: true,
+                referenceNumber: generateClientId(),
+                createdAt: new Date()
+            };
+            
+            // Save to Firestore
+            db.collection('payments').add(paymentData)
+                .then(() => {
+                    showAlert(adminAlert, 'Payment request created successfully! Client will see the payment popup on their next login.', 'success');
+                    
+                    // Clear form
+                    adminDesigns.value = '';
+                    adminDiscount.value = '10';
+                    
+                    // Reload active sessions
+                    loadActiveSessions();
+                })
+                .catch((error) => {
+                    showAlert(adminAlert, error.message, 'error');
+                });
+        });
+
+        // Payment Popup Functions
+        function showPaymentPopup(paymentData) {
+            currentPaymentData = paymentData;
+            
+            // Update payment details
+            paymentDetails.innerHTML = '';
+            
+            paymentData.designs.forEach(design => {
+                paymentDetails.innerHTML += `
+                    <div class="design-item">
+                        <span class="design-name">${design.name}</span>
+                        <span class="design-cost">R ${design.cost.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+            
+            paymentDetails.innerHTML += `
+                <div class="discount-row">
+                    <span>Discount (${paymentData.discount.percentage}%)</span>
+                    <span>- R ${paymentData.discount.amount.toLocaleString()}</span>
+                </div>
+                
+                <div class="total-row">
+                    <span>Total Amount:</span>
+                    <span>R ${paymentData.total.toLocaleString()}</span>
+                </div>
+                
+                <div class="payable-amount">
+                    <span>Payable Amount:</span>
+                    <span>R ${paymentData.payableAmount.toLocaleString()}</span>
+                </div>
+            `;
+            
+            // Update reference number in bank info
+            referenceNumber.textContent = paymentData.referenceNumber;
+            
+            // Update WhatsApp link
+            const message = `Hello, I have made a payment for design services. My reference number is ${paymentData.referenceNumber}.`;
+            whatsappBtn.href = `https://wa.me/27817925033?text=${encodeURIComponent(message)}`;
+            
+            // Show the popup
+            paymentPopup.classList.add('active');
+        }
+
+        // Close payment popup
+        closePaymentBtn.addEventListener('click', () => {
+            paymentPopup.classList.remove('active');
+        });
+        
+        // Pay Now button click - show bank details
+        payNowBtn.addEventListener('click', () => {
+            paymentPopup.classList.remove('active');
+            setTimeout(() => {
+                bankPopup.classList.add('active');
+            }, 300);
+        });
+        
+        // Close bank popup
+        closeBankBtn.addEventListener('click', () => {
+            bankPopup.classList.remove('active');
+        });
+        
+        // Copy account number
+        copyAccountBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(accountNumber.textContent)
+                .then(() => {
+                    // Change button text temporarily
+                    const originalHtml = copyAccountBtn.innerHTML;
+                    copyAccountBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyAccountBtn.innerHTML = originalHtml;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        });
+        
+        // Copy reference number
+        copyReferenceBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(referenceNumber.textContent)
+                .then(() => {
+                    // Change button text temporarily
+                    const originalHtml = copyReferenceBtn.innerHTML;
+                    copyReferenceBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyReferenceBtn.innerHTML = originalHtml;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        });
+        
+        // Close popups when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === paymentPopup) {
+                paymentPopup.classList.remove('active');
+            }
+            if (e.target === bankPopup) {
+                bankPopup.classList.remove('active');
+            }
+        });
+
+        // Auth state listener
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                // Get user data from Firestore
+                db.collection('clients').doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            currentUserData = doc.data();
+                            currentUserData.uid = user.uid;
+                            
+                            // Show appropriate navigation based on role
+                            if (currentUserData.role === 'admin') {
+                                profileNavBtn.style.display = 'none';
+                                adminNavBtn.style.display = 'block';
+                                showPage('adminPage');
+                                loadClients();
+                                loadActiveSessions();
+                                profileRole.textContent = 'Administrator';
+                                profileRole.classList.add('rewards');
+                            } else {
+                                profileNavBtn.style.display = 'block';
+                                adminNavBtn.style.display = 'none';
+                                showPage('profilePage');
+                                profileRole.textContent = 'Client';
+                                profileRole.classList.remove('rewards');
+                                
+                                // Update profile UI
+                                document.getElementById('profilePhoto').src = currentUserData.photoURL;
+                                document.getElementById('profileName').textContent = currentUserData.name;
+                                document.getElementById('profileEmail').textContent = currentUserData.email;
+                                document.getElementById('profileClientId').textContent = currentUserData.clientId;
+                                document.getElementById('profileRewards').textContent = currentUserData.rewards + '%';
+                                document.getElementById('profileBalance').textContent = 'R ' + currentUserData.balance.toLocaleString();
+                                
+                                // Check for pending payments
+                                checkForPayments(user.uid);
+                            }
+                        }
+                    });
+            } else {
+                // User is signed out
+                currentUserData = null;
+                showPage('loginPage');
+                profileNavBtn.style.display = 'none';
+                adminNavBtn.style.display = 'none';
+                
+                // Clear form fields
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                
+                // Hide alerts
+                authAlert.style.display = 'none';
+            }
+        });
+
+        // Check for pending payments
+        function checkForPayments(userId) {
+            db.collection('payments')
+                .where('clientId', '==', userId)
+                .where('showPopup', '==', true)
+                .get()
+                .then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        // Show the first pending payment
+                        const paymentDoc = querySnapshot.docs[0];
+                        showPaymentPopup(paymentDoc.data());
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error checking for payments: ", error);
+                });
+        }
+
+        // Helper function to show alerts
+        function showAlert(alertElement, message, type) {
+            alertElement.textContent = message;
+            alertElement.style.display = 'block';
+            alertElement.className = 'alert';
+            alertElement.classList.add(type === 'error' ? 'alert-error' : 'alert-success');
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Generate random client ID
+        function generateClientId() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
