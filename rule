@@ -1,0 +1,134 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can create/read their own data, admins can manage all
+    match /users/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+      allow update: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Orders - ONLY admins can create (with payment links), users see their own
+    match /orders/{orderId} {
+      // Only admins can create orders (to control payment link creation)
+      allow create: if request.auth != null && isAdmin();
+      
+      // Users can read their own orders
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || isAdmin());
+      
+      // Only admins can update (to mark as paid, add payment links, etc.)
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Projects - ONLY admins can create, users see their own
+    match /projects/{projectId} {
+      // Only admins can create projects (tied to orders)
+      allow create: if request.auth != null && isAdmin();
+      
+      // Users can read their own projects
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || isAdmin());
+      
+      // Only admins can update
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Timeline items
+    match /timelineItems/{timelineItemId} {
+      // Only admins can create timeline updates
+      allow create: if request.auth != null && isAdmin();
+      
+      // Users can read timeline items for their projects
+      allow read: if request.auth != null && 
+        (resource.data.projectId != null && canReadProject(resource.data.projectId) || isAdmin());
+      
+      // Only admins can update timeline
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Deposits - SIMPLER FIXED VERSION
+    match /deposits/{depositId} {
+      // Users can create deposit REQUESTS with specific validations
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'requested' &&
+        request.resource.data.amount >= 100.00 &&
+        !request.resource.data.keys().hasAny(['ozowLink', 'processedAt', 'processedBy', 'paidAt', 'markedPaidBy', 'rejectionReason']);
+      
+      // Users can read their own deposits, admins can read all
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // USERS can update to cancel their own deposit requests - SIMPLER
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid && // User owns it
+        resource.data.status == 'requested' && // Currently requested
+        request.resource.data.status == 'cancelled' && // Changing to cancelled
+        // Make sure they're not setting admin-only fields
+        !request.resource.data.keys().hasAny(['ozowLink', 'processedAt', 'processedBy', 'paidAt', 'markedPaidBy', 'rejectionReason']);
+      
+      // ADMINS can update for processing
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Transactions - ONLY admins can create (after payment verification)
+    match /transactions/{transactionId} {
+      // Only admins can create transactions (after payment verification)
+      allow create: if request.auth != null && isAdmin();
+      
+      // Users can read their own transactions
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Only admins can update
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Payment Links - Separate collection for secure storage
+    match /paymentLinks/{linkId} {
+      // ONLY admins can create payment links
+      allow create: if request.auth != null && isAdmin();
+      
+      // Users can read their own payment links
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // ONLY admins can update
+      allow update: if request.auth != null && isAdmin();
+      
+      // Only admins can delete
+      allow delete: if request.auth != null && isAdmin();
+    }
+    
+    // Helper function to check if user can read a project
+    function canReadProject(projectId) {
+      return exists(/databases/$(database)/documents/projects/$(projectId)) && 
+        get(/databases/$(database)/documents/projects/$(projectId)).data.userId == request.auth.uid;
+    }
+    
+    // Admin check function
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
